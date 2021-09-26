@@ -468,8 +468,12 @@ void dispose_banish( BANISH_DATA *pBan, int type )
 	return;
     }
 
-    UNLINK(pBan, (type == BANISH_USER) ? first_banish_user : first_banish_site,
-		 (type == BANISH_USER) ? last_banish_user : last_banish_site);
+	if( type == BANISH_USER)
+		UNLINK(pBan, first_banish_user, last_banish_user);
+	else
+		UNLINK(pBan, first_banish_site, last_banish_site);
+   /* UNLINK(pBan, (type == BANISH_USER) ? first_banish_user : first_banish_site,
+		 (type == BANISH_USER) ? last_banish_user : last_banish_site);*/
     free_banish(pBan);
     return;
 }

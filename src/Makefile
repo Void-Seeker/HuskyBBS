@@ -1,7 +1,8 @@
 CC      = gcc
 PROF    = -DLINUX
 NOCRYPT =
-C_FLAGS = -Wall -ggdb -O3 $(PROF) $(NOCRYPT)
+#C_FLAGS = -Wall -ggdb -O3 $(PROF) $(NOCRYPT)
+C_FLAGS = -ansi -O3 $(PROF) $(NOCRYPT)
 L_FLAGS = -O2 $(PROF) -lcrypt
 # L_FLAGS = -O2 $(PROF)
 
@@ -12,7 +13,7 @@ all: bbs
 
 bbs: $(O_FILES)
 	rm -f bbs
-	$(CC) $(L_FLAGS) -o bbs $(O_FILES)
+	$(CC) $(L_FLAGS) -o bbs $(O_FILES) $(L_FLAGS)
 
 .c.o: bbs.h
 	$(CC) -c $(C_FLAGS) $<

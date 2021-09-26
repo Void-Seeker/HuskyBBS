@@ -19,6 +19,7 @@
  * ROM license in the file 'doc/rom.license' and
  * Smaug license in the file 'doc/smaug.license'
  */
+#include <sys/types.h>
 
 #if !defined(FALSE)
 #define FALSE	0
