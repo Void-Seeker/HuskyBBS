@@ -356,8 +356,14 @@ void free_user( USER_DATA *usr )
 	return;
 
     for (pMail = usr->pMailFirst; pMail; pMail = pMail->next)
-	mail_remove(usr, pMail, FALSE);
-
+    {
+		mail_remove(usr, pMail, FALSE);
+		if(usr->pMailLast == NULL && usr->pMailFirst == NULL)
+		{
+			pMail = NULL;
+			break;
+		}
+	}
     for (fMessage = usr->pMsgFirst; fMessage; fMessage = fMessage->next)
     {
 	UNLINK(fMessage, usr->pMsgFirst, usr->pMsgLast);
