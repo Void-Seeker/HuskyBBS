@@ -512,7 +512,13 @@ void load_boards( void )
 	    }
 	}
     }
-
+	
+	if(first_board == NULL || last_board == NULL)
+    {
+    	bbs_bug("Load_boards: Could not read correct data! You have corrupted or empty %s file!", BOARD_FILE);
+		exit(1);
+		return;
+    }
     log_string("Load_boards: Done");
     return;
 }
