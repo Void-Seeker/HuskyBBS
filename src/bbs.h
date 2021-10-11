@@ -732,6 +732,7 @@ bool	is_turkish		( USER_DATA *usr );
 #define BUG_FILE		BBS_ROOT_PATH "log/bug.log"
 #define IDEA_FILE		BBS_ROOT_PATH "log/idea.log"
 #define CONFIG_FILE		BBS_ROOT_PATH "bbs.config"
+#define RESOLVE_PATH	BBS_ROOT_PATH "resolve"
 
 #define CMD_DO_FUN( fun )	DO_FUN	fun
 

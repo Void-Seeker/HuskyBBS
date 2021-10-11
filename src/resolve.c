@@ -196,7 +196,7 @@ void create_resolve( DESC_DATA *d, long ip, sh_int port )
 	sprintf(str_local, "%d", BBS_PORT);
 	sprintf(str_remote, "%d", port);
 	sprintf(str_ip, "%ld", ip);
-	execl("../lib/resolve", "resolve", str_local, str_ip, str_remote, 0);
+	execl(RESOLVE_PATH, "resolve", str_local, str_ip, str_remote, 0);
 	log_string("Exec failed; Closing child.");
 	d->ifd = -1;
 	d->ipid = -1;
