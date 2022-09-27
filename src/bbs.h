@@ -725,21 +725,23 @@ bool    is_turkish      ( USER_DATA *usr );
 /*
  * Data files user by the server.
  */
-#define TEMP_FILE       "user/bbstmp"
-#define TEMP_DIR        "/tmp/"
-#define USER_DIR        "user/"
-#define CLIP_DIR        "clip/"
-#define NOTE_DIR        "boards/"
-#define MAIL_DIR        "mails/"
-#define NULL_FILE       "/dev/null"
-#define HELP_FILE       "data/helps.db"
-#define BANISH_FILE     "data/banish.db"
-#define VALIDATE_FILE       "data/validate.db"
-#define BOARD_FILE      "data/boards.db"
+#define BBS_ROOT_PATH	"./"
+#define TEMP_FILE		BBS_ROOT_PATH "user/bbstmp"
+#define TEMP_DIR		BBS_ROOT_PATH "tmp/"
+#define USER_DIR		BBS_ROOT_PATH "user/"
+#define CLIP_DIR		BBS_ROOT_PATH "clip/"
+#define NOTE_DIR		BBS_ROOT_PATH "boards/"
+#define MAIL_DIR		BBS_ROOT_PATH "mails/"
+#define NULL_FILE		"/dev/null"
+#define HELP_FILE		BBS_ROOT_PATH "data/helps.db"
+#define BANISH_FILE		BBS_ROOT_PATH "data/banish.db"
+#define VALIDATE_FILE	BBS_ROOT_PATH "data/validate.db"
+#define BOARD_FILE		BBS_ROOT_PATH "data/boards.db"
 
-#define BUG_FILE        "log/bug.log"
-#define IDEA_FILE       "log/idea.log"
-#define CONFIG_FILE     "bbs.config"
+#define BUG_FILE		BBS_ROOT_PATH "log/bug.log"
+#define IDEA_FILE		BBS_ROOT_PATH "log/idea.log"
+#define CONFIG_FILE		BBS_ROOT_PATH "bbs.config"
+#define RESOLVE_PATH	BBS_ROOT_PATH "resolve"
 
 #define CMD_DO_FUN( fun )   DO_FUN  fun
 
