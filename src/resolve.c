@@ -28,15 +28,15 @@
 #include <signal.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-
+#include <stdlib.h>
 #include "bbs.h"
 
 #if !defined( STDOUT_FILENO )
 #define STDOUT_FILENO 1
 #endif
 
-#define IS_NULL(str)	((str) == NULL || (str)[0] == '\0')
-#define BBS_PORT	3000
+#define IS_NULL(str)    ((str) == NULL || (str)[0] == '\0')
+#define BBS_PORT    3000
 
 bool read_from_resolve( int fd, char *buffer )
 {
@@ -46,58 +46,58 @@ bool read_from_resolve( int fd, char *buffer )
     iStart = strlen(inbuf);
     if (iStart >= sizeof(inbuf) - 10)
     {
-	log_string("Resolve inbuf overflow!");
-	return FALSE;
+        log_string("Resolve inbuf overflow!");
+        return FALSE;
     }
 
     for (;;)
     {
-	int nRead;
+        int nRead;
 
-	nRead = read(fd, inbuf + iStart, sizeof(inbuf) - 10 - iStart);
-	if (nRead > 0)
-	{
-	    iStart += nRead;
-	    if (inbuf[iStart-2] == '\n' || inbuf[iStart-2] == '\r')
-		break;
-	}
-	else if (nRead == 0)
-	    return FALSE;
-	else if (errno == EWOULDBLOCK)
-	    break;
-	else
-	{
-	    perror("Read_from_resolve");
-	    return FALSE;
-	}
+        nRead = read(fd, inbuf + iStart, sizeof(inbuf) - 10 - iStart);
+        if (nRead > 0)
+        {
+            iStart += nRead;
+            if (inbuf[iStart-2] == '\n' || inbuf[iStart-2] == '\r')
+                break;
+        }
+        else if (nRead == 0)
+            return FALSE;
+        else if (errno == EWOULDBLOCK)
+            break;
+        else
+        {
+            perror("Read_from_resolve");
+            return FALSE;
+        }
     }
 
     inbuf[iStart] = '\0';
 
     for (i = 0; inbuf[i] != '\n' && inbuf[i] != '\r'; i++)
     {
-	if (inbuf[i] == '\0')
-	    return FALSE;
+        if (inbuf[i] == '\0')
+            return FALSE;
     }
 
     for (i = 0, k = 0; inbuf[i] != '\n' && inbuf[i] != '\r'; i++)
     {
-	if (inbuf[i] == '\b' && k > 0)
-	    --k;
-	else if (isascii(inbuf[i]) && isprint(inbuf[i]))
-	    buffer[k++] = inbuf[i];
+        if (inbuf[i] == '\b' && k > 0)
+            --k;
+        else if (isascii(inbuf[i]) && isprint(inbuf[i]))
+            buffer[k++] = inbuf[i];
     }
 
     if (k == 0)
-	buffer[k++] = ' ';
+        buffer[k++] = ' ';
 
     buffer[k] = '\0';
 
     while (inbuf[i] == '\n' || inbuf[i] == '\r')
-	i++;
+        i++;
 
     for (j = 0; (inbuf[j] = inbuf[i+j]) != '\0'; j++)
-	;
+        ;
 
     return TRUE;
 }
@@ -112,24 +112,24 @@ void process_resolve( DESC_DATA *d )
     buffer[0] = '\0';
 
     if (!read_from_resolve(d->ifd, buffer) || IS_NULL(buffer))
-	return;
+        return;
 
     user = first_arg(buffer, address, FALSE);
 
     if (!IS_NULL(user))
     {
-	if (d->ident) free_string(d->ident);
-	d->ident = str_dup(user);
+        if (d->ident) free_string(d->ident);
+        d->ident = str_dup(user);
     }
 
     if (!IS_NULL(address))
     {
-	if (d->host) free_string(d->host);
-	d->host = str_dup(address);
-	if (USR(d) && USR(d)->host_name)
-	    free_string(USR(d)->host_name);
-	USR(d)->host_name = str_dup(address);
-	get_small_host(USR(d));
+        if (d->host) free_string(d->host);
+        d->host = str_dup(address);
+        if (USR(d) && USR(d)->host_name)
+            free_string(USR(d)->host_name);
+        USR(d)->host_name = str_dup(address);
+        get_small_host(USR(d));
     }
 
     close(d->ifd);
@@ -137,7 +137,7 @@ void process_resolve( DESC_DATA *d )
     waitpid(d->ipid, &status, WNOHANG);
     d->ipid = -1;
 
-/*    resolve_kill(d); */
+    /*    resolve_kill(d); */
     return;
 }
 
@@ -146,19 +146,19 @@ void resolve_kill( DESC_DATA *d )
     int status;
 
     if (d == NULL)
-	return;
+        return;
 
     if (d->ipid > -1)
     {
-	kill(d->ipid, SIGKILL);
-	waitpid(d->ipid, &status, WNOHANG);
-	d->ipid = -1; /* ? */
+        kill(d->ipid, SIGKILL);
+        waitpid(d->ipid, &status, WNOHANG);
+        d->ipid = -1; /* ? */
     }
 
     if (d->ifd > -1)
     {
-	close(d->ifd);
-	d->ifd = -1; /* ? */
+        close(d->ifd);
+        d->ifd = -1; /* ? */
     }
 }
 
@@ -169,42 +169,42 @@ void create_resolve( DESC_DATA *d, long ip, sh_int port )
 
     if (pipe(fds) != 0)
     {
-	perror("Create_resolve: pipe: ");
-	return;
+        perror("Create_resolve: pipe: ");
+        return;
     }
 
     if (dup2(fds[1], STDOUT_FILENO) != STDOUT_FILENO)
     {
-	perror("Create_resolve: dup2 (stdout): ");
-	return;
+        perror("Create_resolve: dup2 (stdout): ");
+        return;
     }
 
     close(fds[1]);
 
     if ((pid = fork()) > 0)
     {
-	d->ifd = fds[0];
-	d->ipid = pid;
+        d->ifd = fds[0];
+        d->ipid = pid;
     }
     else if (pid == 0)
     {
-	char str_ip[64], str_local[64], str_remote[64];
+        char str_ip[64], str_local[64], str_remote[64];
 
-	d->ifd = fds[0];
-	d->ipid = pid;
+        d->ifd = fds[0];
+        d->ipid = pid;
 
-	sprintf(str_local, "%d", BBS_PORT);
-	sprintf(str_remote, "%d", port);
-	sprintf(str_ip, "%ld", ip);
-	execl(RESOLVE_PATH, "resolve", str_local, str_ip, str_remote, 0);
-	log_string("Exec failed; Closing child.");
-	d->ifd = -1;
-	d->ipid = -1;
-	exit(0);
+        sprintf(str_local, "%d", BBS_PORT);
+        sprintf(str_remote, "%d", port);
+        sprintf(str_ip, "%ld", ip);
+        execl("resolve", "resolve", str_local, str_ip, str_remote, (char *)0);
+        log_string("Exec failed; Closing child.");
+        d->ifd = -1;
+        d->ipid = -1;
+        exit(0);
     }
     else
     {
-	perror("Create_resolve: fork");
-	close(fds[0]);
+        perror("Create_resolve: fork");
+        close(fds[0]);
     }
 }
